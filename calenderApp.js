@@ -40,3 +40,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+const express = require("express");
+const app = express();
+const port = 3000;
+
+// Sample event data
+const eventsData = {
+    "2023-09-25": ["Event 1", "Event 2"],
+    // Add more event data here
+};
+
+// Define a route to retrieve events for a given date
+app.get("/events/:date", (req, res) => {
+    const date = req.params.date;
+    const events = eventsData[date] || [];
+    res.json(events);
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
