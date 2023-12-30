@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Random Excerpt Viewer</title>
+    <title>Random 1000-Character Excerpt</title>
+</head>
+<body>
+    <h1>Random 1000-Character Excerpt</h1>
+    <p id="excerpt"></p>
+    <button onclick="previousExcerpt()">Previous</button>
+    <button onclick="nextExcerpt()">Next</button>
+    <button onclick="refreshExcerpt()">Refresh</button>
+
     <script>
-        let content = '';
-        let currentIndex = 0;
+        let text = '';
+        let currentPosition = 0;
         const excerptLength = 1000;
 
-        function loadContent() {
-            fetch('data.txt')
-                .then(response => response.text())
-                .then(data => {
-                    content = data;
-                    displayExcerpt();
-                })
-                .catch(error => console.error('Error fetching data:', error));
+        fetch('data.txt')
+            .then(response => response.text())
+            .then(data => {
+                text = data;
+                showExcerpt();
+            })
+            .catch(error => console.error('Error fetching text:', error));
+
+        function showExcerpt() {
+            let excerpt = text.slice(currentPosition, currentPosition + excerptLength);
+            document.getElementById('excerpt').textContent = excerpt;
         }
 
-        function displayExcerpt() {
-            let excerpt = content.substr(currentIndex, excerptLength);
-            document.getElementById('excerpt').innerText = excerpt;
+        function previousExcerpt() {
+            if (currentPosition - excerptLength >= 0) {
+                currentPosition -= excerptLength;
+                showExcerpt();
+            } else {
+                alert('Cannot go to previous excerpt');
+            }
         }
 
         function nextExcerpt() {
-            if (currentIndex + excerptLength < content.length) {
-                currentIndex += excerptLength;
-                displayExcerpt();
+            if (currentPosition + excerptLength <= text.length) {
+                currentPosition += excerptLength;
+                showExcerpt();
             } else {
-                alert('End of content reached.');
+                alert('Cannot go to next excerpt');
             }
         }
 
         function refreshExcerpt() {
-            let randomIndex = Math.floor(Math.random() * (content.length - excerptLength));
-            currentIndex = randomIndex;
-            displayExcerpt();
+            currentPosition = Math.floor(Math.random() * (text.length - excerptLength));
+            showExcerpt();
         }
     </script>
-</head>
-<body onload="loadContent()">
-    <h1>Random Excerpt Viewer</h1>
-    <p id="excerpt"></p>
-    <button onclick="nextExcerpt()">Next</button>
-    <button onclick="refreshExcerpt()">Refresh</button>
 </body>
 </html>
