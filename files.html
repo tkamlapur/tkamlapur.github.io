@@ -15,7 +15,7 @@
         let currentPosition = 0;
         const excerptLength = 1000;
 
-        fetch('data.txt')
+        fetch('merged_output.txt')
             .then(response => response.text())
             .then(data => {
                 text = data;
