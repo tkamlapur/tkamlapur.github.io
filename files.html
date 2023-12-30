@@ -1,14 +1,47 @@
-<!doctype html>
-            <html lang="en">
-              <head>
-                <meta charset="utf-8">
-                <title>Files</title>
-                <meta name="generator" content="GrapesJS Studio">
-                <meta name="viewport" content="width=device-width,initial-scale=1">
-                <meta property="og:type" content="website">
-                <meta name="robots" content="index,follow">
-                <link rel="stylesheet" href="./css/style.css">
-              </head>
-              <body><div>New page 3</div></body>
-            </html>
-          
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Excerpt Viewer</title>
+    <script>
+        let content = '';
+        let currentIndex = 0;
+        const excerptLength = 1000;
+
+        function loadContent() {
+            fetch('data.txt')
+                .then(response => response.text())
+                .then(data => {
+                    content = data;
+                    displayExcerpt();
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displayExcerpt() {
+            let excerpt = content.substr(currentIndex, excerptLength);
+            document.getElementById('excerpt').innerText = excerpt;
+        }
+
+        function nextExcerpt() {
+            if (currentIndex + excerptLength < content.length) {
+                currentIndex += excerptLength;
+                displayExcerpt();
+            } else {
+                alert('End of content reached.');
+            }
+        }
+
+        function refreshExcerpt() {
+            let randomIndex = Math.floor(Math.random() * (content.length - excerptLength));
+            currentIndex = randomIndex;
+            displayExcerpt();
+        }
+    </script>
+</head>
+<body onload="loadContent()">
+    <h1>Random Excerpt Viewer</h1>
+    <p id="excerpt"></p>
+    <button onclick="nextExcerpt()">Next</button>
+    <button onclick="refreshExcerpt()">Refresh</button>
+</body>
+</html>
