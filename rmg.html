@@ -12,14 +12,23 @@
     #menu {
       margin: 50px auto;
       padding: 20px;
-      width: 60%;
+      width: 80%;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #f9f9f9;
     }
-    .menu-content {
-      text-align: center;
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin-bottom: 20px;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
     }
     .refresh-btn, .copy-btn {
       cursor: pointer;
@@ -28,7 +37,7 @@
       color: #fff;
       border: none;
       border-radius: 5px;
-      margin-right: 10px;
+      margin-right: 5px;
     }
     .refresh-btn:hover, .copy-btn:hover {
       background-color: #0056b3;
@@ -746,18 +755,35 @@
       const menuContent = document.getElementById('menuContent');
       menuContent.innerHTML = ''; // Clear existing content
 
+      const table = document.createElement('table');
+      const tableHeader = document.createElement('tr');
+      const headerCell = document.createElement('th');
+      headerCell.textContent = 'Category';
+      tableHeader.appendChild(headerCell);
+
       categories.forEach(category => {
         const dish = getRandomDish(category);
-        const paragraph = document.createElement('p');
-        paragraph.innerHTML = `${category}: <span id="${category.replace(' ', '')}Dish">${dish}</span> <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
-        menuContent.appendChild(paragraph);
+        const tableRow = document.createElement('tr');
+
+        const categoryCell = document.createElement('td');
+        categoryCell.textContent = category;
+        tableRow.appendChild(categoryCell);
+
+        const dishCell = document.createElement('td');
+        dishCell.innerHTML = `${dish} <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
+        tableRow.appendChild(dishCell);
+
+        table.appendChild(tableRow);
       });
+
+      table.insertBefore(tableHeader, table.firstChild);
+      menuContent.appendChild(table);
     }
 
     // Function to refresh a dish from a specific category
     function refreshDish(category) {
       const dish = getRandomDish(category);
-      document.getElementById(`${category.replace(' ', '')}Dish`).innerText = dish;
+      document.querySelectorAll('#menuContent table td')[categories.indexOf(category) + 1].innerHTML = `${dish} <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
     }
 
     // Function to copy the generated menu to the clipboard
@@ -765,7 +791,7 @@
       let copiedMenu = '';
 
       categories.forEach(category => {
-        const dish = document.getElementById(`${category.replace(' ', '')}Dish`).innerText;
+        const dish = document.querySelectorAll('#menuContent table td')[categories.indexOf(category) + 1].textContent.trim();
         if (dish !== 'None') {
           copiedMenu += `${dish}\n`;
         }
