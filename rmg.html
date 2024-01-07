@@ -2,35 +2,24 @@
 <html>
 <head>
   <title>Random Menu Generator</title>
-  <meta name="viewport" content="length=device-length, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5">
   <style>
     /* Add CSS styles for formatting */
     body {
       text-align: center;
       font-family: Arial, sans-serif;
-      height: 90%;
     }
     #menu {
       margin: 50px auto;
       padding: 20px;
-      width: 80%;
-      height: 90%;
+      width: 60%;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #f9f9f9;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .menu-content {
+      text-align: center;
       margin-bottom: 20px;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #f2f2f2;
     }
     .refresh-btn, .copy-btn {
       cursor: pointer;
@@ -39,7 +28,7 @@
       color: #fff;
       border: none;
       border-radius: 5px;
-      margin-right: 5px;
+      margin-right: 10px;
     }
     .refresh-btn:hover, .copy-btn:hover {
       background-color: #0056b3;
@@ -50,6 +39,7 @@
   <div id="menu">
     <h1>Random Menu Generator</h1>
     <button onclick="generateRandomMenu()">Suggest a random Menu</button>
+    <h2>Click refresh to change the dishes individually. Click "Copy to clipboard" to copy and paste.</h2>
     <div class="menu-content" id="menuContent">
       <!-- Menu content will be dynamically added here -->
     </div>
@@ -756,35 +746,18 @@
       const menuContent = document.getElementById('menuContent');
       menuContent.innerHTML = ''; // Clear existing content
 
-      const table = document.createElement('table');
-      const tableHeader = document.createElement('tr');
-      const headerCell = document.createElement('th');
-      headerCell.textContent = 'Category';
-      tableHeader.appendChild(headerCell);
-
       categories.forEach(category => {
         const dish = getRandomDish(category);
-        const tableRow = document.createElement('tr');
-
-        const categoryCell = document.createElement('td');
-        categoryCell.textContent = category;
-        tableRow.appendChild(categoryCell);
-
-        const dishCell = document.createElement('td');
-        dishCell.innerHTML = `${dish} <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
-        tableRow.appendChild(dishCell);
-
-        table.appendChild(tableRow);
+        const paragraph = document.createElement('p');
+        paragraph.innerHTML = `${category}: <span id="${category.replace(' ', '')}Dish">${dish}</span> <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
+        menuContent.appendChild(paragraph);
       });
-
-      table.insertBefore(tableHeader, table.firstChild);
-      menuContent.appendChild(table);
     }
 
     // Function to refresh a dish from a specific category
     function refreshDish(category) {
       const dish = getRandomDish(category);
-      document.querySelectorAll('#menuContent table td')[categories.indexOf(category) + 1].innerHTML = `${dish} <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
+      document.getElementById(`${category.replace(' ', '')}Dish`).innerText = dish;
     }
 
     // Function to copy the generated menu to the clipboard
@@ -792,7 +765,7 @@
       let copiedMenu = '';
 
       categories.forEach(category => {
-        const dish = document.querySelectorAll('#menuContent table td')[categories.indexOf(category) + 1].textContent.trim();
+        const dish = document.getElementById(`${category.replace(' ', '')}Dish`).innerText;
         if (dish !== 'None') {
           copiedMenu += `${dish}\n`;
         }
