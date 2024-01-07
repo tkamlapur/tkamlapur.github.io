@@ -43,7 +43,6 @@
       background-color: #0056b3;
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZvDs9/B6ZI+0+ebkw/+7X8iPtp+qJTWr0z0BY8B+eRpzZoX2mjGP5S0v1zGDLw6H6jL7jcx5IBZ6s4l9mCME/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   <div id="menu">
@@ -770,7 +769,7 @@
         tableRow.appendChild(categoryCell);
 
         const dishCell = document.createElement('td');
-        dishCell.innerHTML = `${dish} <button class="refresh-btn" onclick="refreshDish('${category}')"><i class="fas fa-sync-alt"></i></button>`;
+        dishCell.innerHTML = `${dish} <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
         tableRow.appendChild(dishCell);
 
         table.appendChild(tableRow);
