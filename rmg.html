@@ -741,7 +741,6 @@
       return filteredDishes[randomIndex].dishName;
     }
 
-    // Function to generate a random menu
     function generateRandomMenu() {
       const menuContent = document.getElementById('menuContent');
       menuContent.innerHTML = ''; // Clear existing content
@@ -749,7 +748,7 @@
       categories.forEach(category => {
         const dish = getRandomDish(category);
         const paragraph = document.createElement('p');
-        paragraph.innerHTML = `${category}: <span id="${category.replace(' ', '')}Dish">${dish}</span> <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
+        paragraph.innerHTML = `<input type="checkbox" id="${category.replace(' ', '')}Checkbox" unchecked> ${category}: <span id="${category.replace(' ', '')}Dish">${dish}</span> <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
         menuContent.appendChild(paragraph);
       });
     }
@@ -760,14 +759,17 @@
       document.getElementById(`${category.replace(' ', '')}Dish`).innerText = dish;
     }
 
-    // Function to copy the generated menu to the clipboard
+  // Function to copy the checked categories of the generated menu to the clipboard
     function copyMenuToClipboard() {
       let copiedMenu = '';
 
       categories.forEach(category => {
-        const dish = document.getElementById(`${category.replace(' ', '')}Dish`).innerText;
-        if (dish !== 'None') {
-          copiedMenu += `${dish}\n`;
+        const checkbox = document.getElementById(`${category.replace(' ', '')}Checkbox`);
+        if (checkbox.checked) {
+          const dish = document.getElementById(`${category.replace(' ', '')}Dish`).innerText;
+          if (dish !== 'None') {
+            copiedMenu += `${dish}\n`;
+          }
         }
       });
 
@@ -779,6 +781,7 @@
       textarea.style.display = 'none';
       alert('Menu copied to clipboard!');
     }
+
 
     // Initially generate a menu when the page loads
     generateRandomMenu();
