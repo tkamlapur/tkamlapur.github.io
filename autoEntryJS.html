@@ -2,8 +2,11 @@
 <html>
 <head>
     <title>Select Dishes</title>
+    
 </head>
-<body>
+
+<body align=center>
+<h1>Menu JS Generator</h1>
     <select id="select1"></select><br><br>
     <select id="select2"></select><br><br>
     <select id="select3"></select><br><br>
@@ -11,6 +14,7 @@
     <select id="select5"></select><br><br>
     <select id="select6"></select><br><br>
     <select id="select7"></select><br><br>
+    <select id="select8"></select><br><br>
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
     <script>
@@ -20,36 +24,33 @@
         let selectedDishes = {};
 
         function populateSelectBoxes() {
-            for (let i = 1; i <= 7; i++) {
-                let selectBox = document.getElementById(`select${i}`);
-                let option = document.createElement('option');
-                option.textContent = 'Select a Dish';
-                selectBox.appendChild(option);
+    for (let i = 1; i <= 8; i++) {
+        let selectBox = document.getElementById(`select${i}`);
+        let option = document.createElement('option');
+        option.textContent = 'Select a Dish';
+        selectBox.appendChild(option);
 
-                for (let category in menu_dict) {
-                    let dishes = menu_dict[category];
-                    let optGroup = document.createElement('optgroup');
-                    optGroup.label = category;
-
-                    dishes.forEach(dish => {
-                        let option = document.createElement('option');
-                        option.textContent = dish;
-                        optGroup.appendChild(option);
-                    });
-
-                    selectBox.appendChild(optGroup);
-                }
-
-                selectBox.addEventListener('change', function () {
-                    selectedDishes[`select${i}`] = {
-                        category: selectBox.options[selectBox.selectedIndex].parentNode.label,
-                        dish: selectBox.value
-                    };
-                });
-
-                selectBoxes.push(selectBox);
-            }
+        let allDishes = [];
+        for (let category in menu_dict) {
+            allDishes.push(...menu_dict[category]);
         }
+
+        allDishes.sort().forEach(dish => {
+            let option = document.createElement('option');
+            option.textContent = dish;
+            selectBox.appendChild(option);
+        });
+
+        selectBox.addEventListener('change', function () {
+            selectedDishes[`select${i}`] = {
+                dish: selectBox.value
+            };
+        });
+
+        selectBoxes.push(selectBox);
+    }
+}
+
 
         function copyToClipboard() {
             let clipboardText = '';
@@ -86,3 +87,5 @@
     </script>
 </body>
 </html>
+
+
