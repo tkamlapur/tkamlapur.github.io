@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wearable Items Recommendation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+        }
+
+        .filters label {
+            margin-right: 10px;
+        }
+
+        #recommended-items {
+            margin-top: 20px;
+        }
+
+        #recommended-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #recommended-list li {
+            margin-bottom: 20px;
+        }
+
+        .item img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>Wearable Items Recommendation</h1>
+
+    <div class="filters">
+        <label for="mood">Mood:</label>
+        <select id="mood">
+            <option value="">Select mood</option>
+            <option value="happy">Happy</option>
+            <option value="relaxed">Relaxed</option>
+            <!-- Add more options -->
+        </select>
+
+        <label for="occasion">Occasion:</label>
+        <select id="occasion">
+            <option value="">Select occasion</option>
+            <option value="formal">Formal</option>
+            <option value="casual">Casual</option>
+            <!-- Add more options -->
+        </select>
+
+        <label for="season">Season:</label>
+        <select id="season">
+            <option value="">Select season</option>
+            <option value="summer">Summer</option>
+            <option value="winter">Winter</option>
+            <!-- Add more options -->
+        </select>
+    </div>
+
+    <div id="recommended-items">
+        <h2>Recommended Items</h2>
+        <ul id="recommended-list"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const moodSelect = document.getElementById("mood");
+            const occasionSelect = document.getElementById("occasion");
+            const seasonSelect = document.getElementById("season");
+            const recommendedList = document.getElementById("recommended-list");
+
+            const items = [
+                { name: "T-Shirt", mood: ["happy", "relaxed"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
+                { name: "Blazer", mood: ["happy"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "Sweater", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Hoodie", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Dress Shirt", mood: ["formal"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "Jeans", mood: ["relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "Skirt", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
+                { name: "Sundress", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
+                { name: "Winter Coat", mood: ["happy"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Sweatpants", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Sneakers", mood: ["happy", "relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "High Heels", mood: ["happy"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "Sandals", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
+                { name: "Boots", mood: ["happy"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Scarf", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Sunglasses", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
+                { name: "Hat", mood: ["relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "Gloves", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
+                { name: "Watch", mood: ["happy", "relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
+                { name: "Earrings", mood: ["happy"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" }
+            ];
+
+            function filterItems() {
+                const selectedMood = moodSelect.value;
+                const selectedOccasion = occasionSelect.value;
+                const selectedSeason = seasonSelect.value;
+
+                const filteredItems = items.filter(item =>
+                    (selectedMood === "" || item.mood.includes(selectedMood)) &&
+                    (selectedOccasion === "" || item.occasion.includes(selectedOccasion)) &&
+                    (selectedSeason === "" || item.season.includes(selectedSeason))
+                );
+
+                displayRecommendedItems(filteredItems);
+            }
+
+            function displayRecommendedItems(items) {
+                recommendedList.innerHTML = "";
+                items.forEach(item => {
+                    const li = document.createElement("li");
+                    li.className = "item";
+                    const img = document.createElement("img");
+                    img.src = item.image;
+                    const itemName = document.createElement("span");
+                    itemName.textContent = item.name;
+                    li.appendChild(img);
+                    li.appendChild(itemName);
+                    recommendedList.appendChild(li);
+                });
+            }
+
+            moodSelect.addEventListener("change", filterItems);
+            occasionSelect.addEventListener("change", filterItems);
+            seasonSelect.addEventListener("change", filterItems);
+
+            filterItems(); // Initially filter items based on default selections
+        });
+    </script>
+</body>
+</html>
