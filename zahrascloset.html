@@ -42,34 +42,103 @@
             margin-right: 10px;
             vertical-align: middle;
         }
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-image: url('closet_background.jpg'); /* Specify the path to your background image */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.filters {
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent white background to the filters */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#recommended-items {
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Add a semi-transparent white background to the recommended items */
+    padding: 20px;
+    border-radius: 10px;
+}
+
     </style>
 </head>
 <body>
     <h1>Zahra's Closet</h1>
 
     <div class="filters">
-        <label for="mood">Mood:</label>
-        <select id="mood">
-            <option value="">Select mood</option>
-            <option value="happy">Happy</option>
-            <option value="relaxed">Relaxed</option>
-            <!-- Add more options -->
-        </select>
-
         <label for="occasion">Occasion:</label>
         <select id="occasion">
             <option value="">Select occasion</option>
-            <option value="formal">Formal</option>
-            <option value="casual">Casual</option>
-            <!-- Add more options -->
+            <option value="Sherullah">Sherullah</option>
+            <option value="Moharram">Moharram</option>
+            <option value="Shadi">Shadi</option>
+            <option value="Sabaq">Sabaq</option>
+            <option value="Istefada">Istefada</option>
+            <option value="Majlis">Majlis</option>
+            <option value="Urs">Urs</option>
+            <option value="Work">Work</option>
+            <option value="Casual">Casual</option>
+            <option value="Picnic">Picnic</option>
+            <option value="Party">Party</option>
         </select>
 
-        <label for="season">Season:</label>
-        <select id="season">
-            <option value="">Select season</option>
-            <option value="summer">Summer</option>
-            <option value="winter">Winter</option>
-            <!-- Add more options -->
+        <label for="weather">Weather:</label>
+        <select id="weather">
+            <option value="">Select weather</option>
+            <option value="Sunny">Sunny</option>
+            <option value="Rainy">Rainy</option>
+            <option value="Cloudy">Cloudy</option>
+            <option value="Humid">Humid</option>
+            <option value="Arid">Arid</option>
+            <option value="Cold">Cold</option>
+        </select>
+
+        <label for="fit">Fit:</label>
+        <select id="fit">
+            <option value="">Select fit</option>
+            <option value="Tight">Tight</option>
+            <option value="Loose">Loose</option>
+            <option value="Medium">Medium</option>
+        </select>
+
+        <label for="pattern">Pattern:</label>
+        <select id="pattern">
+            <option value="">Select pattern</option>
+            <option value="Polka">Polka</option>
+            <option value="Stripes">Stripes</option>
+            <option value="Checks">Checks</option>
+        </select>
+
+        <label for="texture">Texture:</label>
+        <select id="texture">
+            <option value="">Select texture</option>
+            <option value="Velvet">Velvet</option>
+            <option value="Silk">Silk</option>
+            <option value="Cotton">Cotton</option>
+            <option value="Synthetic">Synthetic</option>
+        </select>
+
+        <label for="color-coordination">Color Coordination:</label>
+        <select id="color-coordination">
+            <option value="">Select color coordination</option>
+            <option value="Complementary">Complementary</option>
+            <option value="Contrast">Contrast</option>
+            <option value="Monochromatic">Monochromatic</option>
+        </select>
+
+        <label for="color">Color:</label>
+        <select id="color">
+            <option value="">Select color</option>
+            <option value="White">White</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Beige">Beige</option>
+            <option value="Green">Green</option>
+            <option value="Red">Red</option>
         </select>
     </div>
 
@@ -80,43 +149,41 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const moodSelect = document.getElementById("mood");
             const occasionSelect = document.getElementById("occasion");
-            const seasonSelect = document.getElementById("season");
+            const weatherSelect = document.getElementById("weather");
+            const fitSelect = document.getElementById("fit");
+            const patternSelect = document.getElementById("pattern");
+            const textureSelect = document.getElementById("texture");
+            const colorCoordinationSelect = document.getElementById("color-coordination");
+            const colorSelect = document.getElementById("color");
             const recommendedList = document.getElementById("recommended-list");
 
             const items = [
-                { name: "T-Shirt", mood: ["happy", "relaxed"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
-                { name: "Blazer", mood: ["happy"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "Sweater", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Hoodie", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Dress Shirt", mood: ["formal"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "Jeans", mood: ["relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "Skirt", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
-                { name: "Sundress", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
-                { name: "Winter Coat", mood: ["happy"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Sweatpants", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Sneakers", mood: ["happy", "relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "High Heels", mood: ["happy"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "Sandals", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
-                { name: "Boots", mood: ["happy"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Scarf", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Sunglasses", mood: ["happy"], occasion: ["casual"], season: ["summer"], image: "https://via.placeholder.com/100" },
-                { name: "Hat", mood: ["relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "Gloves", mood: ["relaxed"], occasion: ["casual"], season: ["winter"], image: "https://via.placeholder.com/100" },
-                { name: "Watch", mood: ["happy", "relaxed"], occasion: ["casual"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" },
-                { name: "Earrings", mood: ["happy"], occasion: ["formal"], season: ["summer", "winter"], image: "https://via.placeholder.com/100" }
+                { name: "Rida 1", occasion: ["Sherullah", "Moharram"], weather: ["Sunny", "Rainy"], fit: ["Tight", "Loose"], pattern: ["Polka", "Stripes"], texture: ["Velvet", "Silk"], colorCoordination: ["Complementary", "Contrast"], color: ["White", "Yellow"] },
+                { name: "Rida 2", occasion: ["Shadi", "Sabaq"], weather: ["Sunny", "Rainy"], fit: ["Loose", "Medium"], pattern: ["Checks", "Stripes"], texture: ["Cotton", "Synthetic"], colorCoordination: ["Complementary", "Monochromatic"], color: ["Green", "Red"] },
+                { name: "Rida 3", occasion: ["Istefada", "Majlis"], weather: ["Cloudy", "Humid"], fit: ["Tight", "Medium"], pattern: ["Polka", "Checks"], texture: ["Velvet", "Cotton"], colorCoordination: ["Contrast", "Monochromatic"], color: ["Yellow", "Beige"] },
+                { name: "Rida 4", occasion: ["Urs", "Work"], weather: ["Cloudy", "Arid"], fit: ["Tight", "Loose"], pattern: ["Stripes", "Checks"], texture: ["Silk", "Synthetic"], colorCoordination: ["Contrast", "Monochromatic"], color: ["White", "Green"] },
+                { name: "Rida 5", occasion: ["Casual", "Picnic"], weather: ["Sunny", "Cold"], fit: ["Medium", "Loose"], pattern: ["Polka", "Stripes"], texture: ["Cotton", "Synthetic"], colorCoordination: ["Complementary", "Contrast"], color: ["Yellow", "Red"] }
+                // Add more items as needed
             ];
 
             function filterItems() {
-                const selectedMood = moodSelect.value;
                 const selectedOccasion = occasionSelect.value;
-                const selectedSeason = seasonSelect.value;
+                const selectedWeather = weatherSelect.value;
+                const selectedFit = fitSelect.value;
+                const selectedPattern = patternSelect.value;
+                const selectedTexture = textureSelect.value;
+                const selectedColorCoordination = colorCoordinationSelect.value;
+                const selectedColor = colorSelect.value;
 
                 const filteredItems = items.filter(item =>
-                    (selectedMood === "" || item.mood.includes(selectedMood)) &&
                     (selectedOccasion === "" || item.occasion.includes(selectedOccasion)) &&
-                    (selectedSeason === "" || item.season.includes(selectedSeason))
+                    (selectedWeather === "" || item.weather.includes(selectedWeather)) &&
+                    (selectedFit === "" || item.fit.includes(selectedFit)) &&
+                    (selectedPattern === "" || item.pattern.includes(selectedPattern)) &&
+                    (selectedTexture === "" || item.texture.includes(selectedTexture)) &&
+                    (selectedColorCoordination === "" || item.colorCoordination.includes(selectedColorCoordination)) &&
+                    (selectedColor === "" || item.color.includes(selectedColor))
                 );
 
                 displayRecommendedItems(filteredItems);
@@ -126,20 +193,18 @@
                 recommendedList.innerHTML = "";
                 items.forEach(item => {
                     const li = document.createElement("li");
-                    li.className = "item";
-                    const img = document.createElement("img");
-                    img.src = item.image;
-                    const itemName = document.createElement("span");
-                    itemName.textContent = item.name;
-                    li.appendChild(img);
-                    li.appendChild(itemName);
+                    li.textContent = item.name;
                     recommendedList.appendChild(li);
                 });
             }
 
-            moodSelect.addEventListener("change", filterItems);
             occasionSelect.addEventListener("change", filterItems);
-            seasonSelect.addEventListener("change", filterItems);
+            weatherSelect.addEventListener("change", filterItems);
+            fitSelect.addEventListener("change", filterItems);
+            patternSelect.addEventListener("change", filterItems);
+            textureSelect.addEventListener("change", filterItems);
+            colorCoordinationSelect.addEventListener("change", filterItems);
+            colorSelect.addEventListener("change", filterItems);
 
             filterItems(); // Initially filter items based on default selections
         });
