@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahra's Closet</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            padding: 10px;
+            background-image: url('closet_background1.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        select {
+            padding: 8px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #333;
+            width: 150px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .items-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .item {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            width: calc(50% - 10px); /* Display two items per row */
+            max-width: 220px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+        }
+
+        .item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 600px) {
+            .filters {
+                flex-direction: column;
+            }
+
+            select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .item {
+                width: 100%;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Discover Your Perfect Wearable</h1>
+
+    <div class="filters">
+        <label for="mood">Mood:</label>
+        <select id="mood">
+            <option value="">Select Mood</option>
+        </select>
+
+        <label for="occasion">Occasion:</label>
+        <select id="occasion">
+            <option value="">Select Occasion</option>
+        </select>
+
+        <label for="color">Color:</label>
+        <select id="color">
+            <option value="">Select Color</option>
+        </select>
+
+        <label for="material">Material:</label>
+        <select id="material">
+            <option value="">Select Material</option>
+        </select>
+
+        <label for="weather">Weather:</label>
+        <select id="weather">
+            <option value="">Select Weather</option>
+        </select>
+
+        <button onclick="filterItems()">Apply Filters</button>
+    </div>
+
+    <div id="wearableItemsContainer" class="items-container">
+        <!-- Display wearable items dynamically using JavaScript -->
+    </div>
+
+    <script>
+        const wearableItems = [
+            {
+                name: "Strawberry Souffle",
+                image: "ridas/rida05.jpeg",
+                remarks: "Designed for Distant Relatives",
+                mood: "Okayish",
+                occasion: "Casual",
+                color: "White",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Happy Irritation",
+                image: "ridas/rida07.jpeg",
+                remarks: "Designed for Misaq. Feel centre of attraction with a tinge of irritation and prettiness.",
+                mood: "Happy",
+                occasion: "Bhari",
+                color: "Blue",
+                material: "Velvet",
+                weather: "Non-summer"
+            },{
+                name: "Red Peach",
+                image: "ridas/rida08.jpeg",
+                remarks: "Semi New",
+                mood: "Okayish",
+                occasion: "Casual",
+                color: "Peach",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Cadbury Silk",
+                image: "ridas/rida09.jpeg",
+                remarks: "Wow look, elegance and simplicity packed in purple.",
+                mood: "Elegant",
+                occasion: "Bhari",
+                color: "Purple",
+                material: "Cotton Silk",
+                weather: "All Seasons"
+            },{
+                name: "Historical Contrast",
+                image: "ridas/rida10.jpeg",
+                remarks: "Flaunt in style with bottle green.",
+                mood: "Pretty",
+                occasion: "Bhari",
+                color: "Green",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Innocent white",
+                image: "ridas/rida11.jpeg",
+                remarks: "Showcase sincerity and innocence with white",
+                mood: "New",
+                occasion: "Khushi",
+                color: "White",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Red Lotus",
+                image: "ridas/rida06.jpeg",
+                remarks: "Display sophistication with simplicity",
+                mood: "Elegant",
+                occasion: "Bhari",
+                color: "Red",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Expressive Flaunt",
+                image: "ridas/rida04.jpeg",
+                remarks: "Very Heavy. For close functions or Bhari nights. Very Fine. You could flaunt in it. Very expressive for your emotions and beauty.",
+                mood: "Pretty",
+                occasion: "Bhari",
+                color: "Blue",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Bold yet pretty",
+                image: "ridas/rida03.jpeg",
+                remarks: "Very fine. Makes you feel pretty, bold, centre of attraction and a complete masterpiece.",
+                mood: "Pretty",
+                occasion: "Bhari",
+                color: "Red",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Ever Pink",
+                image: "ridas/rida02.jpeg",
+                remarks: "For a happy feel",
+                mood: "Confident",
+                occasion: "Bhari",
+                color: "Pink",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Just Wow",
+                image: "ridas/rida01.jpeg",
+                remarks: "For Bhari and Khushi Occasions",
+                mood: "Excitement",
+                occasion: "Bhari",
+                color: "Maroon",
+                material: "Velvet",
+                weather: "Non-Summer"
+            },{
+                name: "Barbie Rida",
+                image: "ridas/rida13.jpeg",
+                remarks: "Very fine, for Shadi Occasions and close function.",
+                mood: "Happy",
+                occasion: "Khushi",
+                color: "White",
+                material: "Satin",
+                weather: "All Seasons"
+            },{
+                name: "Thrilling Blues",
+                image: "ridas/rida12.jpeg",
+                remarks: "Suspenseful",
+                mood: "New",
+                occasion: "Khushi",
+                color: "Blue",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Brownie Brown",
+                image: "ridas/rida17.jpeg",
+                remarks: "Just like eating Brownie, it makes you happy. The most favourite in the entire collection.",
+                mood: "Excitement",
+                occasion: "Khushi",
+                color: "Brown",
+                material: "Satin",
+                weather: "All Seasons"
+            },{
+                name: "Intricate Sky",
+                image: "ridas/rida16.jpeg",
+                remarks: "Very Fine, intricately designed, brand new, feels happy.",
+                mood: "Excitement",
+                occasion: "Bhari",
+                color: "Blue",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Red Dune",
+                image: "ridas/rida15.jpeg",
+                remarks: "Cream and Red",
+                mood: "New",
+                occasion: "Khushi",
+                color: "Cream",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Spirited Hazelnut",
+                image: "ridas/rida14.jpeg",
+                remarks: "Cream brown with net Ghagra",
+                mood: "New",
+                occasion: "Bhari",
+                color: "Cream",
+                material: "Cotton",
+                weather: "All Seasons"
+            },{
+                name: "Pretty Rose",
+                image: "ridas/rida18.jpeg",
+                remarks: "Feel prettiness in pink",
+                mood: "Pretty",
+                occasion: "Khushi",
+                color: "Pink",
+                material: "Silk",
+                weather: "All Seasons"
+            },
+            {
+                name: "Shining Sunflower",
+                image: "ridas/rida19.jpeg",
+                remarks: "Designed for LQ 1445H",
+                mood: "Okayish",
+                occasion: "Bhari",
+                color: "White",
+                material: "Cotton",
+                weather: "All Seasons"
+            }
+            // Add more items as needed...
+        ];
+
+        function populateDropdown(id, key) {
+            const dropdown = document.getElementById(id);
+            const uniqueValues = [...new Set(wearableItems.map(item => item[key]))];
+
+            uniqueValues.forEach(value => {
+                const option = document.createElement('option');
+                option.text = value;
+                option.value = value;
+                dropdown.add(option);
+            });
+        }
+
+        function filterItems() {
+            const mood = document.getElementById('mood').value;
+            const occasion = document.getElementById('occasion').value;
+            const color = document.getElementById('color').value;
+            const material = document.getElementById('material').value;
+            const weather = document.getElementById('weather').value;
+
+            const filteredItems = wearableItems.filter(item =>
+                (mood === "" || item.mood === mood) &&
+                (occasion === "" || item.occasion === occasion) &&
+                (color === "" || item.color === color) &&
+                (material === "" || item.material === material) &&
+                (weather === "" || item.weather === weather)
+            );
+
+            displayItems(filteredItems);
+        }
+
+        function displayItems(items) {
+            const container = document.getElementById('wearableItemsContainer');
+            container.innerHTML = ''; // Clear previous content
+
+            items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('item');
+
+                const imageElement = document.createElement('img');
+                imageElement.src = item.image;
+                itemElement.appendChild(imageElement);
+
+                const nameElement = document.createElement('p');
+                nameElement.textContent = item.name;
+                nameElement.style.fontWeight = 'bold';
+                itemElement.appendChild(nameElement);
+
+                const remarksElement = document.createElement('p');
+                remarksElement.textContent = item.remarks;
+                itemElement.appendChild(remarksElement);
+
+                container.appendChild(itemElement);
+            });
+        }
+
+        // Populate dropdowns and initialize
+        populateDropdown('mood', 'mood');
+        populateDropdown('occasion', 'occasion');
+        populateDropdown('color', 'color');
+        populateDropdown('material', 'material');
+        populateDropdown('weather', 'weather');
+    </script>
+</body>
+</html>
