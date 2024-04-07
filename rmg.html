@@ -768,7 +768,7 @@
         if (checkbox.checked) {
           const dish = document.getElementById(`${category.replace(' ', '')}Dish`).innerText;
           if (dish !== 'None') {
-            copiedMenu += `${dish},`;
+            copiedMenu += `${dish}\N`;
           }
         }
       });
