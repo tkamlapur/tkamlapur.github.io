@@ -733,6 +733,29 @@
       "Meethas", "Ice Cream","Kharas (Veg)", "Kharas (Meat)", "Kharas (Chicken)", "TARKARI VEG", "TARKARI NON VEG", "Bread", "Main Course", "Main Course 2", "Soup", "Salads", "Fruits", "Beverages - Cold"
       // Add other categories here
     ];
+    
+const profiles = [
+  { name: "Profile 1", categories: ["Beverages - Cold", "Soup", "Salads"] },
+  { name: "Profile 2", categories: ["Meethas", "Ice Cream", "Main Course"] },
+  { name: "Profile 3", categories: ["Meethas", "Kharas (Veg)", "TARKARI NON VEG", "Main Course", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 4", categories: ["Ice Cream", "Kharas (Meat)", "TARKARI VEG", "Main Course 2", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 5", categories: ["Ice Cream", "Kharas (Chicken)", "TARKARI VEG", "Main Course 2", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 6", categories: ["Meethas", "Kharas (Chicken)", "TARKARI NON VEG", "Main Course", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 7", categories: ["Meethas", "Kharas (Meat)", "TARKARI NON VEG", "Soup", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 8", categories: ["Ice Cream", "Kharas (Veg)", "TARKARI VEG", "Soup", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 9", categories: ["Ice Cream", "Kharas (Chicken)", "TARKARI VEG", "Main Course", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 10", categories: ["Meethas", "Kharas (Meat)", "TARKARI VEG", "Main Course 2", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 11", categories: ["Ice Cream", "Kharas (Meat)", "TARKARI VEG", "Main Course 2", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 12", categories: ["Meethas", "Kharas (Chicken)", "TARKARI NON VEG", "Soup", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 13", categories: ["Meethas", "Kharas (Veg)", "TARKARI NON VEG", "Main Course", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 14", categories: ["Ice Cream", "Kharas (Meat)", "TARKARI NON VEG", "Main Course", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 15", categories: ["Meethas", "Kharas (Chicken)", "TARKARI VEG", "Soup", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 16", categories: ["Ice Cream", "Kharas (Veg)", "TARKARI NON VEG", "Soup", "Salads", "Fruits", "Beverages - Cold", "Bread"] },
+  { name: "Profile 17", categories: ["Meethas", "Kharas (Meat)", "TARKARI VEG", "Main Course", "Salads", "Fruits", "Beverages - Cold", "Bread"] }
+];
+
+
+
 
     // Function to get a random dish from a specific category
     function getRandomDish(category) {
@@ -741,17 +764,19 @@
       return filteredDishes[randomIndex].dishName;
     }
 
-    function generateRandomMenu() {
-      const menuContent = document.getElementById('menuContent');
-      menuContent.innerHTML = ''; // Clear existing content
+    function generateRandomMenu(profileIndex) {
+  const menuContent = document.getElementById('menuContent');
+  menuContent.innerHTML = ''; // Clear existing content
 
-      categories.forEach(category => {
-        const dish = getRandomDish(category);
-        const paragraph = document.createElement('p');
-        paragraph.innerHTML = `<input type="checkbox" id="${category.replace(' ', '')}Checkbox" unchecked> ${category}: <span id="${category.replace(' ', '')}Dish">${dish}</span> <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
-        menuContent.appendChild(paragraph);
-      });
-    }
+  categories.forEach(category => {
+    const dish = getRandomDish(category);
+    const paragraph = document.createElement('p');
+    const isChecked = profileIndex !== undefined && profiles[profileIndex].categories.includes(category);
+
+    paragraph.innerHTML = `<input type="checkbox" id="${category.replace(' ', '')}Checkbox" ${isChecked ? 'checked' : ''}> ${category}: <span id="${category.replace(' ', '')}Dish">${dish}</span> <button class="refresh-btn" onclick="refreshDish('${category}')">Refresh</button>`;
+    menuContent.appendChild(paragraph);
+  });
+}
 
     // Function to refresh a dish from a specific category
     function refreshDish(category) {
@@ -759,13 +784,13 @@
       document.getElementById(`${category.replace(' ', '')}Dish`).innerText = dish;
     }
 
-  // Function to copy the checked categories of the generated menu to the clipboard
+// Function to copy the checked categories of the generated menu to the clipboard
     function copyMenuToClipboard() {
       let copiedMenu = '';
 
       categories.forEach(category => {
         const checkbox = document.getElementById(`${category.replace(' ', '')}Checkbox`);
-        if (checkbox.checked) {
+       if (checkbox.checked) {
           const dish = document.getElementById(`${category.replace(' ', '')}Dish`).innerText;
           if (dish !== 'None') {
             copiedMenu += `${dish}\n`;
@@ -782,8 +807,32 @@
       alert('Menu copied to clipboard!');
     }
 
+    
+
+//function to populate dropdown with profiles
+function populateProfileDropdown() {
+  const selectElement = document.createElement('select');
+  selectElement.id = 'profileSelect';
+  
+  profiles.forEach((profile, index) => {
+    const optionElement = document.createElement('option');
+    optionElement.value = index.toString();
+    optionElement.textContent = profile.name;
+    selectElement.appendChild(optionElement);
+  });
+
+  const menuDiv = document.getElementById('menu');
+  menuDiv.insertBefore(selectElement, menuDiv.firstChild);
+
+  selectElement.addEventListener('change', (event) => {
+    const profileIndex = parseInt(event.target.value, 10);
+    generateRandomMenu(profileIndex);
+  });
+}
+
 
     // Initially generate a menu when the page loads
+    populateProfileDropdown();
     generateRandomMenu();
   </script>
 </body>
