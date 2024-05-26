@@ -1,4 +1,4 @@
-const vangi_dict = ["Meethas", "Ice Cream", "Kharas (Veg)", "Kharas (Meat)", "Kharas (Chicken)", "Tarkari Veg", "Tarkari Non Veg", "Bakery", "Main Course", "Main Course", "Salads", "Fruits", "Beverages - Cold"];
+const vangi_dict = ["Meethas", "Ice Cream", "Kharas (Veg)", "Kharas (Meat)", "Kharas (Chicken)", "TARKARI VEG", "TARKARI NON VEG", "Bakery", "Main Course", "Main Course", "Salads", "Fruits", "Beverages - Cold"];
 
 // Function to create a select element with options
 function createSelectElement(category) {
