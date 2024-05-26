@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel-like Sheet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <table id="dinnerTable">
+        <tr class="header">
+            <th>Haj Mamul 1445H Dinner</th>
+            <th>MM/EM/MB</th>
+            <th><input type="number" name="thalQuantity" id="thalQuantity" placeholder="Enter quantity"></th>
+            <th><input type="date" id="currentDateHeader" placeholder="Select date"></th>
+        </tr>
+        <tbody id="selectOptionsRow">
+            <!-- Select options will be dynamically added here -->
+        </tbody>
+            <th colspan="4">Ingredients Required</th>
+        </tr>
+        <tbody id="ingredientsRow">
+            <!-- Ingredients will be dynamically added here -->
+        </tbody>
+    </table>
+    
+    <button onclick="calculateIngredients()">Submit</button>
+    <button onclick="printTable()">Print</button>
+
+    <script src="dictionary.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
