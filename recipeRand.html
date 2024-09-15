@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Recipe Showcase</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script> <!-- PapaParse -->
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .recipe-header h1 {
+            font-size: 4vw; /* Dynamic heading size based on viewport width */
+            flex: 1; /* Let the heading take up available space */
+            margin-right: 10px;
+        }
+
+        .recipe-header span {
+            font-size: 2vw; /* Dynamic text size */
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: auto;
+            max-height: 50vh; /* Allow the image to scale based on available height */
+            object-fit: cover;
+        }
+
+        .recipe-details {
+            padding: 20px;
+            font-size: 1.5vw; /* Dynamic text size */
+        }
+
+        .ingredients ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .ingredients ul li {
+            margin-bottom: 5px;
+        }
+
+        .recipe-instructions {
+            margin-top: 15px;
+            white-space: pre-wrap; /* Ensure line breaks are honored */
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .random-button {
+            background-color: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.5vw; /* Dynamic button size */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .random-button:hover {
+            background-color: #ff4c4c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="recipe-container">
+        <!-- Recipe content will be dynamically inserted here -->
+    </div>
+
+    <div class="button-container">
+        <button class="random-button" id="random-recipe">Load Random Recipe</button>
+    </div>
+
+    <script>
+        let recipes = [];
+
+        // Function to load the CSV file and parse it
+        function loadCSV() {
+            fetch('Cleaned_Indian_Food_Dataset.csv')
+                .then(response => response.text())
+                .then(data => {
+                    Papa.parse(data, {
+                        header: true, // Treat the first row as headers
+                        complete: function(results) {
+                            recipes = results.data; // Store parsed data in recipes array
+                            loadRandomRecipe(); // Load the first random recipe
+                        },
+                        error: function(error) {
+                            console.error('Error parsing CSV:', error);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error loading CSV:', error));
+        }
+
+        // Function to load and display a random recipe
+        function loadRandomRecipe() {
+            if (recipes.length === 0) return;
+
+            const randomIndex = Math.floor(Math.random() * recipes.length);
+            const recipe = recipes[randomIndex];
+            
+            document.getElementById('recipe-container').innerHTML = `
+                <div class="recipe-header">
+                    <h1>${recipe.TranslatedRecipeName}</h1>
+                    <span>${recipe.TotalTimeInMins} mins | ${recipe.Cuisine}</span>
+                </div>
+                <img src="${recipe['image-url']}" alt="${recipe.TranslatedRecipeName}" class="recipe-img" />
+                <div class="recipe-details">
+                    <h3>Ingredients:</h3>
+                    <div class="ingredients">
+                        <ul>${recipe.TranslatedIngredients.split(',').map(ingredient => `<li>${ingredient.trim()}</li>`).join('')}</ul>
+                    </div>
+                    <h3>Instructions:</h3>
+                    <p class="recipe-instructions">${recipe.TranslatedInstructions}</p>
+                </div>
+            `;
+        }
+
+        // Initial load of the CSV file
+        loadCSV();
+
+        // Event listener for button click to load random recipe
+        document.getElementById('random-recipe').addEventListener('click', loadRandomRecipe);
+    </script>
+
+</body>
+</html>
