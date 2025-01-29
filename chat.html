@@ -16,15 +16,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            margin: 0;
+            height: 100vh;  /* Full viewport height */
+            overflow: hidden;  /* Prevent scrolling */
         }
         .chat-container {
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            height: 100%;  /* Make container take full height */
+            max-width: 400px;  /* Limit width */
             background: #fff;
             border-radius: 15px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         .chat-header {
             background: #007AFF;
@@ -32,10 +36,11 @@
             padding: 15px;
             text-align: center;
             font-size: 18px;
+            flex-shrink: 0;  /* Prevent header from shrinking */
         }
         .chat-box {
             padding: 15px;
-            height: 350px;
+            flex-grow: 1;  /* Allow chat box to take remaining space */
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -61,6 +66,7 @@
             padding: 10px;
             border-top: 1px solid #ddd;
             background: #fff;
+            flex-shrink: 0;  /* Prevent input from shrinking */
         }
         .chat-input input {
             flex: 1;
@@ -252,44 +258,45 @@ function submitPhoneNumber() {
     forwardToTelegramGroup(phoneNumber);
 
     setTimeout(() => {
-        resetBot();
-    }, 3000);  // Wait for a few seconds before resetting the bot
+        askForResetConfirmation();
+    }, 3000);  // Wait for a few seconds before asking for reset confirmation
 
     document.getElementById('chatInput').style.display = 'none';
 }
 
-async function forwardToTelegramGroup(phoneNumber) {
-    const botToken = '7705964738:AAFMxF03ebPGCc-pJf7qILTq4oU5KPhoD7Y';  // Replace with your Telegram bot token
-    const groupId = '-1002331220860';  // Replace with your Telegram group chat ID
-    const message = `Maintenance Issue: "${selectedMaintenance}"\nPhone Number: ${phoneNumber}`;
+function askForResetConfirmation() {
+    const chatBox = document.getElementById('chatBox');
+    const botMessage = document.createElement('div');
+    botMessage.className = 'bot-message';
+    botMessage.innerText = "Your query has been forwarded. Do you want to reset the bot and start over? (Yes / No)";
+    chatBox.appendChild(botMessage);
 
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-    const payload = {
-        chat_id: groupId,
-        text: message
+    const buttonMenu = document.createElement('div');
+    buttonMenu.className = 'button-menu';
+
+    const yesButton = document.createElement('button');
+    yesButton.className = 'menu-button';
+    yesButton.innerText = "Yes, I confirm";
+    yesButton.onclick = () => resetBot();
+    buttonMenu.appendChild(yesButton);
+
+    const noButton = document.createElement('button');
+    noButton.className = 'menu-button';
+    noButton.innerText = "No, I don't want to reset";
+    noButton.onclick = () => {
+        const botResponse = document.createElement('div');
+        botResponse.className = 'bot-message';
+        botResponse.innerText = "Okay, we will continue without resetting.";
+        chatBox.appendChild(botResponse);
+        chatBox.scrollTop = chatBox.scrollHeight;
     };
 
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        const data = await response.json();
-        if (data.ok) {
-            console.log('Message forwarded to Telegram group successfully!');
-        } else {
-            console.error('Error forwarding message:', data);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    buttonMenu.appendChild(noButton);
+    chatBox.appendChild(buttonMenu);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
- function resetBot() {
+function resetBot() {
     const chatBox = document.getElementById('chatBox');
     chatBox.innerHTML = '';  // Clear chat box
 
@@ -303,8 +310,32 @@ async function forwardToTelegramGroup(phoneNumber) {
     document.getElementById('chatInput').style.display = 'flex';
     document.getElementById('userInput').value = '';  // Clear the input field
     document.getElementById('userInput').placeholder = "Enter room number...";  // Reset placeholder
-}      
-        
+}
+
+
+        async function forwardToTelegramGroup(phoneNumber) {
+            const botToken = '7705964738:AAFMxF03ebPGCc-pJf7qILTq4oU5KPhoD7Y';  // Replace with your Telegram bot token
+            const groupId = '-1002331220860';  // Replace with your Telegram group chat ID
+            const message = `Maintenance Issue: "${selectedMaintenance}"\nPhone Number: ${phoneNumber}`;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            const params = {
+                chat_id: groupId,
+                text: message
+            };
+
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(params)
+                });
+            } catch (error) {
+                console.error('Error forwarding message:', error);
+            }
+        }
     </script>
 
 </body>
