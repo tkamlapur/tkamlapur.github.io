@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohammedi Makan Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chat-header {
+            background: #007AFF;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .chat-box {
+            padding: 15px;
+            height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .bot-message, .user-message {
+            max-width: 80%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .bot-message {
+            background: #007AFF;
+            color: white;
+            align-self: flex-start;
+        }
+        .user-message {
+            background: #e1e1e1;
+            align-self: flex-end;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background: #fff;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        .chat-input button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .menu-button {
+            background: #007AFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">Mohammedi Makan Bot</div>
+        <div class="chat-box" id="chatBox">
+            <div class="bot-message">Welcome to Mohammedi Makan, Please enter your room number to proceed:</div>
+        </div>
+        <div class="chat-input" id="chatInput">
+            <input type="text" id="userInput" placeholder="Enter room number...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedMaintenance = null;
+
+        function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const message = inputField.value.trim();
+            if (message === '') return;
+
+            const chatBox = document.getElementById('chatBox');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message';
+            userMessage.innerText = message;
+            chatBox.appendChild(userMessage);
+
+            inputField.value = '';
+
+            setTimeout(() => {
+                const botResponse = document.createElement('div');
+                botResponse.className = 'bot-message';
+                botResponse.innerText = `Room ${message} received. Please choose an option below:`;
+                chatBox.appendChild(botResponse);
+
+                displayMainMenu();
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+
+            document.getElementById('chatInput').style.display = 'none';
+        }
+
+        function displayMainMenu() {
+            const chatBox = document.getElementById('chatBox');
+            const buttonMenu = document.createElement('div');
+            buttonMenu.className = 'button-menu';
+
+            const options = [
+                "Maintenance", "Emergency Requests", "Paid Services", 
+                "Mawaid", "Discover Makkah", "Mansak PDF", "Live Chat and Information"
+            ];
+            
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'menu-button';
+                button.innerText = option;
+                button.onclick = () => selectMainOption(option);
+                buttonMenu.appendChild(button);
+            });
+
+            chatBox.appendChild(buttonMenu);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function selectMainOption(option) {
+            const chatBox = document.getElementById('chatBox');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message';
+            userMessage.innerText = option;
+            chatBox.appendChild(userMessage);
+
+            if (option === "Maintenance") {
+                setTimeout(() => {
+                    displayMaintenanceMenu();
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    const botResponse = document.createElement('div');
+                    botResponse.className = 'bot-message';
+                    botResponse.innerText = `You selected "${option}". How can we assist you further?`;
+                    chatBox.appendChild(botResponse);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function displayMaintenanceMenu() {
+            const chatBox = document.getElementById('chatBox');
+            const botResponse = document.createElement('div');
+            botResponse.className = 'bot-message';
+            botResponse.innerText = "Please select the issue:";
+            chatBox.appendChild(botResponse);
+
+            const buttonMenu = document.createElement('div');
+            buttonMenu.className = 'button-menu';
+
+            const options = ["Geaser not working", "AC not working", "No water in tap", "Lights not working"];
+
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'menu-button';
+                button.innerText = option;
+                button.onclick = () => selectMaintenanceOption(option);
+                buttonMenu.appendChild(button);
+            });
+
+            chatBox.appendChild(buttonMenu);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function selectMaintenanceOption(option) {
+            selectedMaintenance = option;
+
+            const chatBox = document.getElementById('chatBox');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message';
+            userMessage.innerText = option;
+            chatBox.appendChild(userMessage);
+
+            setTimeout(() => {
+                const botResponse = document.createElement('div');
+                botResponse.className = 'bot-message';
+                botResponse.innerText = "Please enter your phone number with country code:";
+                chatBox.appendChild(botResponse);
+                
+                document.getElementById('chatInput').style.display = 'flex';
+                document.getElementById('userInput').placeholder = "+966123456789";
+                document.getElementById('userInput').setAttribute("onkeydown", "if(event.key==='Enter') submitPhoneNumber()");
+                document.querySelector('.chat-input button').setAttribute("onclick", "submitPhoneNumber()");
+                
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        }
+
+function submitPhoneNumber() {
+    const inputField = document.getElementById('userInput');
+    const phoneNumber = inputField.value.trim();
+    if (phoneNumber === '') return;
+
+    const chatBox = document.getElementById('chatBox');
+    const userMessage = document.createElement('div');
+    userMessage.className = 'user-message';
+    userMessage.innerText = phoneNumber;
+    chatBox.appendChild(userMessage);
+
+    setTimeout(() => {
+        const botResponse = document.createElement('div');
+        botResponse.className = 'bot-message';
+        botResponse.innerText = `Thank you! Your issue "${selectedMaintenance}" has been reported. Our team will contact you at ${phoneNumber}.`;
+        chatBox.appendChild(botResponse);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+
+    // Forward the message to Telegram group
+    forwardToTelegramGroup(phoneNumber);
+
+    setTimeout(() => {
+        resetBot();
+    }, 3000);  // Wait for a few seconds before resetting the bot
+
+    document.getElementById('chatInput').style.display = 'none';
+}
+
+async function forwardToTelegramGroup(phoneNumber) {
+    const botToken = '7705964738:AAFMxF03ebPGCc-pJf7qILTq4oU5KPhoD7Y';  // Replace with your Telegram bot token
+    const groupId = '-1002331220860';  // Replace with your Telegram group chat ID
+    const message = `Maintenance Issue: "${selectedMaintenance}"\nPhone Number: ${phoneNumber}`;
+
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    const payload = {
+        chat_id: groupId,
+        text: message
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        if (data.ok) {
+            console.log('Message forwarded to Telegram group successfully!');
+        } else {
+            console.error('Error forwarding message:', data);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+ function resetBot() {
+    const chatBox = document.getElementById('chatBox');
+    chatBox.innerHTML = '';  // Clear chat box
+
+    // Welcome message
+    const botMessage = document.createElement('div');
+    botMessage.className = 'bot-message';
+    botMessage.innerText = "Welcome to Mohammedi Makan, Please enter your room number to proceed:";
+    chatBox.appendChild(botMessage);
+
+    // Show the input again for the user to enter the room number
+    document.getElementById('chatInput').style.display = 'flex';
+    document.getElementById('userInput').value = '';  // Clear the input field
+    document.getElementById('userInput').placeholder = "Enter room number...";  // Reset placeholder
+}      
+        
+    </script>
+
+</body>
+</html>
