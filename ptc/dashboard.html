@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Proposal Dashboard</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 20px;
+      background: #fafafa;
+      color: #1f1f1f;
+      max-width: 1200px;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+      color: #a00028;
+    }
+
+    .subtitle {
+      margin-top: 0;
+      color: #555;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button,
+    .primary-link {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    button {
+      background: #a00028;
+      color: #fff;
+    }
+
+    button:hover {
+      background: #8c0022;
+    }
+
+    button.secondary {
+      background: #fff;
+      border: 1px solid #a00028;
+      color: #a00028;
+    }
+
+    button.secondary:hover {
+      background: #ffeef3;
+    }
+
+    .primary-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #333;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .primary-link:hover {
+      background: #111;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      margin-bottom: 25px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #e5e5e5;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f7f7f7;
+      font-weight: bold;
+    }
+
+    tr:hover td {
+      background: #fcf7f8;
+    }
+
+    .table-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .placeholder {
+      text-align: center;
+      color: #777;
+      padding: 30px 0;
+    }
+
+    .detail-panel {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+    }
+
+    .detail-panel.hidden {
+      display: none;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+      margin-bottom: 4px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      display: none;
+      font-size: 13px;
+    }
+
+    .status-message.info {
+      display: block;
+      border-color: #b8e0f5;
+      background: #e7f5ff;
+      color: #034c81;
+    }
+
+    .status-message.success {
+      display: block;
+      border-color: #b4e0c0;
+      background: #e9f8ed;
+      color: #1d6b3b;
+    }
+
+    .status-message.error {
+      display: block;
+      border-color: #f5b8c3;
+      background: #ffeef1;
+      color: #8a1f32;
+    }
+  </style>
+</head>
+<body>
+   <!-- Navbar --> <site-nav></site-nav>
+   <script type="module" src="./site-nav.js"></script>
+  <h1>Proposal Dashboard</h1>
+  <p class="subtitle">Review, edit, delete or download saved proposals.</p>
+
+  <div class="actions">
+    <button id="refreshBtn">Refresh List</button>
+    <a href="enkwairi.html" class="primary-link" target="_blank" rel="noopener">Create New Proposal</a>
+  </div>
+
+  <table id="proposalTable">
+    <thead>
+      <tr>
+        <th>Reference No.</th>
+        <th>Company</th>
+        <th>Date</th>
+        <th>Revision</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="5" class="placeholder">Loading proposals...</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <section id="detailPanel" class="detail-panel hidden">
+    <h2>Edit Proposal</h2>
+    <form id="editForm">
+      <div class="detail-grid">
+        <div>
+          <label for="edit_ref_no">Reference No.</label>
+          <input type="text" id="edit_ref_no" name="ref_no" required />
+        </div>
+        <div>
+          <label for="edit_revision">Revision</label>
+          <input type="text" id="edit_revision" name="revision" />
+        </div>
+        <div>
+          <label for="edit_date">Date</label>
+          <input type="date" id="edit_date" name="date" />
+        </div>
+        <div>
+          <label for="edit_company_name">Company Name</label>
+          <input type="text" id="edit_company_name" name="company_name" />
+        </div>
+        <div>
+          <label for="edit_branch">Branch</label>
+          <input type="text" id="edit_branch" name="branch" />
+        </div>
+        <div>
+          <label for="edit_tel">Telephone</label>
+          <input type="text" id="edit_tel" name="tel" />
+        </div>
+        <div>
+          <label for="edit_fax">Fax</label>
+          <input type="text" id="edit_fax" name="fax" />
+        </div>
+        <div>
+          <label for="edit_direct_no">Direct No.</label>
+          <input type="text" id="edit_direct_no" name="direct_no" />
+        </div>
+        <div>
+          <label for="edit_person1_name">Person 1 – Name</label>
+          <input type="text" id="edit_person1_name" name="person1_name" />
+        </div>
+        <div>
+          <label for="edit_person1_title">Person 1 – Title</label>
+          <input type="text" id="edit_person1_title" name="person1_title" />
+        </div>
+        <div>
+          <label for="edit_person2_name">Person 2 – Name</label>
+          <input type="text" id="edit_person2_name" name="person2_name" />
+        </div>
+        <div>
+          <label for="edit_person2_title">Person 2 – Title</label>
+          <input type="text" id="edit_person2_title" name="person2_title" />
+        </div>
+        <div style="grid-column: 1 / -1;">
+          <label for="edit_address_block">Address</label>
+          <textarea id="edit_address_block" name="address_block"></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="updateBtn">Update Proposal</button>
+        <button type="button" id="cancelEditBtn" class="secondary">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <div id="toast" class="status-message"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.46.1/dist/umd/supabase.js"></script>
+  <script src="proposalGenerator.js"></script>
+  <script>
+    (function () {
+      const supabaseUrl = 'https://mrixkgkbtrsvcqprtfex.supabase.co';
+      const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yaXhrZ2tidHJzdmNxcHJ0ZmV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyMTIyMjEsImV4cCI6MjA3ODc4ODIyMX0.W3ih6gRmUAuUZ6_CSUzRCtSBFHlar9XOiTgWWaQuVyo';
+      const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+      const tableBody = document.querySelector('#proposalTable tbody');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const detailPanel = document.getElementById('detailPanel');
+      const editForm = document.getElementById('editForm');
+      const updateBtn = document.getElementById('updateBtn');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const toast = document.getElementById('toast');
+
+      let proposals = [];
+      let activeProposal = null;
+
+      refreshBtn.addEventListener('click', loadProposals);
+      tableBody.addEventListener('click', handleTableClick);
+      updateBtn.addEventListener('click', handleUpdate);
+      cancelEditBtn.addEventListener('click', () => {
+        activeProposal = null;
+        detailPanel.classList.add('hidden');
+        editForm.reset();
+      });
+
+      loadProposals();
+
+      async function loadProposals() {
+        setTablePlaceholder('Loading proposals...');
+        try {
+          const { data, error } = await supabaseClient
+            .from('proposals')
+            .select('*')
+            .order('created_at', { ascending: false });
+          if (error) throw error;
+          proposals = data || [];
+          renderTable();
+        } catch (error) {
+          console.error(error);
+          setTablePlaceholder('Failed to load proposals. Please refresh.');
+          showToast(error.message, 'error');
+        }
+      }
+
+      function setTablePlaceholder(message) {
+        tableBody.innerHTML = `<tr><td colspan="5" class="placeholder">${message}</td></tr>`;
+      }
+
+      function renderTable() {
+        if (!proposals.length) {
+          setTablePlaceholder('No proposals saved yet. Click "Create New Proposal" to add one.');
+          return;
+        }
+
+        tableBody.innerHTML = proposals.map(record => {
+          const id = record.id || record.ref_no;
+          const company = record.company_name || '—';
+          const date = record.date || '—';
+          const revision = record.revision || '00';
+          return `
+            <tr data-id="${id}">
+              <td>${record.ref_no || '—'}</td>
+              <td>${company}</td>
+              <td>${date}</td>
+              <td>${revision}</td>
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="secondary" data-action="edit" data-id="${id}">Edit</button>
+                  <button type="button" class="secondary" data-action="download" data-id="${id}">Download PDF</button>
+                  <button type="button" data-action="delete" data-id="${id}">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function handleTableClick(event) {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const id = button.dataset.id;
+        const action = button.dataset.action;
+        const record = proposals.find(item => (item.id || item.ref_no) == id);
+        if (!record) return;
+
+        if (action === 'edit') {
+          startEdit(record);
+        } else if (action === 'delete') {
+          deleteProposal(record);
+        } else if (action === 'download') {
+          downloadProposal(record);
+        }
+      }
+
+      function startEdit(record) {
+        activeProposal = record;
+        detailPanel.classList.remove('hidden');
+        for (const [key, value] of Object.entries(record)) {
+          const field = editForm.elements.namedItem(key);
+          if (field) {
+            field.value = value || '';
+          }
+        }
+      }
+
+      async function deleteProposal(record) {
+        if (!confirm('Delete this proposal permanently?')) {
+          return;
+        }
+        try {
+          const { error } = await supabaseClient.from('proposals').delete().eq('id', record.id);
+          if (error) throw error;
+          showToast('Proposal deleted.', 'success');
+          detailPanel.classList.add('hidden');
+          await loadProposals();
+        } catch (error) {
+          console.error(error);
+          showToast(`Delete failed: ${error.message}`, 'error');
+        }
+      }
+
+      async function downloadProposal(record) {
+        if (!window.ProposalGenerator) {
+          showToast('PDF generator is not ready yet. Please refresh.', 'error');
+          return;
+        }
+        try {
+          await window.ProposalGenerator.generatePdf(record);
+        } catch (error) {
+          console.error(error);
+          showToast(`Download failed: ${error.message}`, 'error');
+        }
+      }
+
+      async function handleUpdate() {
+        if (!activeProposal) {
+          showToast('Select a proposal to edit first.', 'info');
+          return;
+        }
+        const formData = new FormData(editForm);
+        const payload = {};
+        formData.forEach((value, key) => {
+          payload[key] = value;
+        });
+        try {
+          const { error } = await supabaseClient
+            .from('proposals')
+            .update(payload)
+            .eq('id', activeProposal.id);
+          if (error) throw error;
+          showToast('Proposal updated.', 'success');
+          activeProposal = null;
+          detailPanel.classList.add('hidden');
+          await loadProposals();
+        } catch (error) {
+          console.error(error);
+          showToast(`Update failed: ${error.message}`, 'error');
+        }
+      }
+
+      function showToast(message, type = 'info') {
+        toast.textContent = message;
+        toast.className = `status-message ${type}`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 4000);
+      }
+    })();
+  </script>
+</body>
+</html>
+
